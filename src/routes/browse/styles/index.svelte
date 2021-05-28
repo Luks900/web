@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { browser } from "$app/env";
 	import { goto } from "$app/navigation";
+import { page } from "$app/stores";
 	import StyleGrid from '$lib/components/StyleGrid.svelte';
 	import type { SortedSearchIndexes } from "$lib/stores";
 	import { styleIndex } from '$lib/stores';
-	import type { SearchIndex } from '$lib/types';
+	import type { SearchIndex, SearchIndexItem } from '$lib/types';
 	import { Query } from "$lib/utils";
 	import { onMount } from 'svelte';
 	import { Button,Container,Form,FormGroup,Input,InputGroup,Spinner } from 'sveltestrap';
@@ -27,7 +28,7 @@
 			page: "1"
 		});
 		
-		onPopState();
+		onRouteChanged();
 	});
 
 	let data: SearchIndex;
@@ -37,30 +38,59 @@
 	function filterStyles(d: SortedSearchIndexes, ..._args: any[]) {
 		if (!d) return;
 
-		let val = d[sort];
+		let val: SearchIndex = d[sort];
 
-		if (search)
-			return val.filter((e: any) => e.n.toLowerCase().includes(search.toLowerCase()));
-		else
+		if (search) {
+			let categories: string[] = [];
+			let users: string[] = [];
+			let words: string[] = [];
+		
+			for (const word of search.toLowerCase().split(" ")) {
+				if (word.startsWith("#")) {
+					categories.push(word.slice(1));
+				}
+				else if (word.startsWith("@")) {
+					users.push(word.slice(1));
+				}
+				else {
+					words.push(word);
+				}
+			}
+
+			let s = words.join(" ");
+
+			return val.filter(el => 
+				(!s || (el.n && el.n.toLowerCase().includes(s))) &&
+				(categories.length === 0 || (el.c && categories.includes(el.c.toLowerCase()))) &&
+				(users.length === 0 || (el.ai && el.an && (users.includes(el.ai.toString()) || users.includes(el.an.toLowerCase()))))
+			);
+		}
+		else {
 			return val;
+		}
 	}
 
 	$: updateQuery(search, sort, currentPage);
 	
-	function updateQuery(search: string, sort: string, currentPage: number) {
+	async function updateQuery(search: string, sort: string, currentPage: number) {
 		if (!update) return;
-		
+
 		if (search === query.vars.search && sort === query.vars.sort && currentPage.toString() === query.vars.page) return;
 
 		query.vars.search = search;
 		query.vars.sort = sort;
 		query.vars.page = currentPage.toString();
 
-		if (browser)
-			goto("?"+query.getQuery().toString());
+		if (browser) {
+			update = false;
+			await goto("?"+query.getQuery().toString());
+			update = true;
+		}
 	}
 
-	function onPopState() {
+	$: onRouteChanged($page);
+	function onRouteChanged(a?: any) {
+		if (!update) return;
 		query.setQuery(window.location.search);
 
 		update = false;
@@ -68,6 +98,9 @@
 		input.sort = query.vars.sort;
 		onSearch();
 		currentPage = parseInt(query.vars.page);
+		
+		data = filterStyles($styleIndex.data, search, sort);
+		
 		update = true;
 	}
 
@@ -81,7 +114,6 @@
 	}
 </script>
 
-<svelte:window on:popstate={onPopState} />
 {#if $styleIndex.isLoading}
 	<div class="d-flex justify-content-center align-items-center h-100">
 		<Spinner />
