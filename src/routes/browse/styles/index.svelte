@@ -90,7 +90,7 @@
 
 	$: $page && onRouteChanged();
 	function onRouteChanged() {
-		if (!update) return;
+		if (!update || !window.location.pathname.startsWith("/browse/styles")) return;
 		query.setQuery(window.location.search);
 
 		update = false;
