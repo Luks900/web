@@ -6,10 +6,16 @@
 	export let data: SearchIndexItem;
 </script>
 <a class="h-100 card hover-shadow overflow-hidden" href={'/style/' + data.i}>
-	<img src={getScreenshot({name: data.sn, archived: data.sa})} alt="Screenshot" />
+	{#if data.sn}
+		<img class="img" src={getScreenshot({name: data.sn, archived: data.sa})} alt="Screenshot" />
+	{:else}
+		<div class="img"></div>
+	{/if}
 	<CardBody>
 		<h5 class="card-title">{data.n}</h5>
-		<CardText><small>By <a href={'/user/' + data.ai}>{data.an} ({data.ai})</a></small></CardText>
+		{#if data.ai && data.an}
+			<CardText><small>By <a href={'/browse/styles/?search=' + encodeURIComponent("@"+data.ai)}>@{data.an} ({data.ai})</a></small></CardText>
+		{/if}
 	</CardBody>
 	<div class="card-footer">
 		<div class="d-flex justify-content-between overflow-hidden">
@@ -36,6 +42,9 @@
 
 	img {
 		object-fit: cover;
+	}
+
+	.img {
 		height: 220px;
 	}
 

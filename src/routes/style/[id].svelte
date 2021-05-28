@@ -73,12 +73,14 @@
 						<a href={'/browse/styles?search='+encodeURIComponent("#"+data.info.category)}>{data.info.category}</a>
 					</Col>
 				</Row>
-				<Row>
-					<Col class="col-3 col-lg-5">Author</Col>
-					<Col>
-						<a href={'/user/' + data.info.author.id}>{data.info.author.name} ({data.info.author.id})</a>
-					</Col>
-				</Row>
+				{#if data.info.author}
+					<Row>
+						<Col class="col-3 col-lg-5">Author</Col>
+						<Col>
+							<a href={'/user/' + data.info.author.id}>{data.info.author.name} ({data.info.author.id})</a>
+						</Col>
+					</Row>
+				{/if}
 				<Row>
 					<Col class="col-3 col-lg-5">License</Col>
 					<Col>

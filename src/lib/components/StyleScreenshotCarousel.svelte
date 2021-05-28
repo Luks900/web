@@ -41,6 +41,6 @@
 		<CarouselControl direction="prev" bind:activeIndex items={screenshots} />
 		<CarouselControl direction="next" bind:activeIndex items={screenshots} />
 	</Carousel>
-{:else}
+{:else if screenshots.length === 1}
 	<img src={screenshots[0]} class="d-block w-100 rounded" alt="Screenshot" />
 {/if}
