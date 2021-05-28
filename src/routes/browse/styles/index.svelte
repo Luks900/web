@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { browser } from "$app/env";
 	import { goto } from "$app/navigation";
-import { page } from "$app/stores";
+	import { page } from "$app/stores";
 	import StyleGrid from '$lib/components/StyleGrid.svelte';
 	import type { SortedSearchIndexes } from "$lib/stores";
 	import { styleIndex } from '$lib/stores';
-	import type { SearchIndex, SearchIndexItem } from '$lib/types';
+	import type { SearchIndex } from '$lib/types';
 	import { Query } from "$lib/utils";
 	import { onMount } from 'svelte';
 	import { Button,Container,Form,FormGroup,Input,InputGroup,Spinner } from 'sveltestrap';
@@ -35,7 +35,7 @@ import { page } from "$app/stores";
 
 	$: data = filterStyles($styleIndex.data, search, sort);
 
-	function filterStyles(d: SortedSearchIndexes, ..._args: any[]) {
+	function filterStyles(d: SortedSearchIndexes, ..._args: unknown[]) {
 		if (!d) return;
 
 		let val: SearchIndex = d[sort];
@@ -88,8 +88,8 @@ import { page } from "$app/stores";
 		}
 	}
 
-	$: onRouteChanged($page);
-	function onRouteChanged(a?: any) {
+	$: $page && onRouteChanged();
+	function onRouteChanged() {
 		if (!update) return;
 		query.setQuery(window.location.search);
 
@@ -100,7 +100,7 @@ import { page } from "$app/stores";
 		currentPage = parseInt(query.vars.page);
 		
 		data = filterStyles($styleIndex.data, search, sort);
-		
+
 		update = true;
 	}
 

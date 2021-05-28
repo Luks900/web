@@ -14,6 +14,8 @@ export function htmlToTemplate(html: string): HTMLTemplateElement {
 
 export function addTargetBlank(template: HTMLTemplateElement): void {
 	domMemes(template.content);
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	function domMemes(node: any) {
 		for (const child of node.children) {
 			if (child.nodeName === 'A') {

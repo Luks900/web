@@ -24,14 +24,17 @@ function sort(weeklyInstalls: SearchIndex): SortedSearchIndexes {
 	};
 }
 
+type DataType<T> = { isLoading: boolean; error?: Error; data?: T };
+type HandlerType<T> = (newValue: { isLoading: boolean; error?: Error; data?: T }) => void;
+
 export function fetchOnce<T>(
-	promiseFn: any,
-	initialValue: { isLoading: boolean; error?: Error; data?: T } = { isLoading: false }
-) {
+	promiseFn: any, // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+	initialValue: DataType<T> = { isLoading: false }
+): { subscribe: (handler: HandlerType<T>) => () => void } {
 	let value = initialValue;
 	const subs = [];
 
-	function subscribe(handler: (newValue: { isLoading: boolean; error?: Error; data?: T }) => void) {
+	function subscribe(handler: HandlerType<T>): () => void {
 		subs.push(handler);
 
 		if (value === initialValue && !value.isLoading && browser) {

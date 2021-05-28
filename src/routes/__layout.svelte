@@ -5,8 +5,8 @@
 
 	let isOpen = false;
 
-	function handleUpdate(event: any) {
-		isOpen = event.detail.isOpen;
+	function handleUpdate(event: CustomEvent<boolean>) {
+		isOpen = event.detail;
 	}
 </script>
 <Navbar dark color="dark" class="mb-4" expand="md">

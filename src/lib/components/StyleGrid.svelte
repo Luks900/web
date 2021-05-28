@@ -10,8 +10,9 @@
 	export let perPage = 36;
 
 	let paginated: SearchIndex = [];
-
-	function update(..._args: any[]) {
+	
+	
+	function update(..._args: unknown[]) {
 		totalPages = Math.ceil(data.length / perPage);
 		if (page > totalPages) page = totalPages;
 		if (page <= 0) page = 1;

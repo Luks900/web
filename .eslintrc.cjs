@@ -5,6 +5,10 @@ module.exports = {
 	plugins: ['svelte3', '@typescript-eslint'],
 	ignorePatterns: ['*.cjs'],
 	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
+	rules: {
+		'@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+		'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }]
+	},
 	settings: {
 		'svelte3/typescript': require('typescript')
 	},
