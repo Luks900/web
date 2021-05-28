@@ -2,10 +2,6 @@ name: GitHub Pages
 
 on:
   push:
-    branches:
-      - master
-    paths:
-      - web/**
 
 jobs:
   deploy:
