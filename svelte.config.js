@@ -13,7 +13,7 @@ const config = {
 		// You can create optimized builds for different platforms by
 		// specifying a different adapter
 		adapter: adapter({
-			fallback: '200.html'
+			fallback: '404.html'
 		}),
 
 		// hydrate the <div id="svelte"> element in src/app.html
