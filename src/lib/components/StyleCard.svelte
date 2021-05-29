@@ -9,9 +9,9 @@
 
 <a class="h-100 w-100 card hover-shadow overflow-hidden" href={'/style/' + data.i}>
 	{#if data.sn}
-		<img class="img" src={getScreenshot({ name: data.sn, archived: data.sa })} alt="Screenshot" />
+		<img class="screenshot" src={getScreenshot({ name: data.sn, archived: data.sa })} alt="Screenshot" />
 	{:else}
-		<div class="img" />
+		<div class="screenshot" />
 	{/if}
 	<CardBody>
 		<h5 class="card-title">{data.n}</h5>
@@ -58,7 +58,7 @@
 		object-fit: cover;
 	}
 
-	.img {
+	.screenshot {
 		height: 220px;
 	}
 
