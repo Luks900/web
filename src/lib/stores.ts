@@ -1,6 +1,6 @@
 import { browser } from '$app/env';
 import { DATA_PREFIX } from '$lib/constants';
-import type { SearchIndex, CategoriesIndex, CategoriesIndexItem } from '$lib/types';
+import type { CategoriesIndex, CategoriesIndexItem, SearchIndex } from '$lib/types';
 
 export type SortedSearchIndexes = {
 	weeklyInstalls: SearchIndex;
@@ -16,23 +16,22 @@ export const styleIndex = fetchOnce<SortedSearchIndexes>(() =>
 );
 
 function getCategories(weeklyInstalls: SearchIndex): CategoriesIndex {
-	let categories: { [key: string]: CategoriesIndexItem } = {};
+	const categories: { [key: string]: CategoriesIndexItem } = {};
 	for (const style of weeklyInstalls) {
 		if (categories[style.c] === undefined) {
-			categories[style.c] = {n: style.c, s: [style]};
-		}
-		else {
+			categories[style.c] = { n: style.c, s: [style] };
+		} else {
 			categories[style.c].s.push(style);
 		}
 	}
 
-	let arr = [];
+	const arr = [];
 	for (const key in categories) {
 		arr.push(categories[key]);
 	}
 
 	console.log(arr);
-	arr.sort((a,b)=>b.s.length-a.s.length);
+	arr.sort((a, b) => b.s.length - a.s.length);
 
 	return arr;
 }

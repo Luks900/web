@@ -119,13 +119,16 @@
 		<Spinner />
 	</div>
 {:else if $styleIndex.error}
-	Error! {$styleIndex.error}
+	<Container>
+		<h1>Error</h1>
+		{$styleIndex.error}
+	</Container>
 {:else if $styleIndex.data}
 	<Container xxl>
 		<Form on:submit={onSearch}>
 			<FormGroup>
 				<InputGroup>
-					<Input bind:value={input.search} type="text" name="search" id="search" placeholder="Search styles..." />
+					<Input bind:value={input.search} type="text" name="search" id="search" placeholder="Search userstyles..." />
 					<select bind:value={input.sort} class="form-select" style="max-width: max-content" aria-label="Sort by">
 						<option value="weeklyInstalls">Weekly installs</option>
 						<option value="totalInstalls">Total installs</option>
@@ -133,7 +136,7 @@
 						<option value="updated">Updated</option>
 						<option value="created">Created</option>
 					</select>
-					<Button type="submit">Search</Button>
+					<Button type="submit" color="dark">Search</Button>
 				</InputGroup>
 			</FormGroup>
 		</Form>

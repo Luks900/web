@@ -15,10 +15,10 @@
 	<Collapse class="justify-content-end" {isOpen} navbar expand="md" on:update={handleUpdate}>
 		<Nav navbar>
 			<NavItem>
-				<NavLink href="/browse/categories">Categories</NavLink>
+				<NavLink href="/browse/styles">Userstyles</NavLink>
 			</NavItem>
 			<NavItem>
-				<NavLink href="/browse/styles">Styles</NavLink>
+				<NavLink href="/browse/categories">Categories</NavLink>
 			</NavItem>
 			<NavItem>
 				<NavLink href="https://github.com/33kk/uso-archive" target="_blank">GitHub</NavLink>

@@ -1,46 +1,46 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-	import { Button,Container,Form,FormGroup,Input,InputGroup } from 'sveltestrap';
-
-	let search = ""; 
-	let sort = "weeklyInstalls";
-
-	function onSearch(e: Event) {
-		const qs = new URLSearchParams();
-		if (search)
-			qs.set("search", search)
-		if (sort !== "weeklyInstalls")
-			qs.set("sort", sort);
-		goto("/browse/styles?" + qs.toString());
-		e.preventDefault();
-	}
+	import { Container } from 'sveltestrap';
 </script>
 
-<Container>
-	<div class="mb-5">
-		<h1 class="text-center mb-3">Search</h1>
-		<Form on:submit={onSearch}>
-			<FormGroup>
-				<InputGroup>
-					<Input bind:value={search} type="text" name="search" id="search" placeholder="Search styles..." />
-					<select bind:value={sort} class="form-select" style="max-width: max-content" aria-label="Sort by">
-						<option value="weeklyInstalls">Weekly installs</option>
-						<option value="totalInstalls">Total installs</option>
-						<option value="rating">Rating</option>
-						<option value="updated">Updated</option>
-						<option value="created">Created</option>
-					</select>
-					<Button type="submit">Search</Button>
-				</InputGroup>
-			</FormGroup>
-		</Form>
+<Container class="text-center">
+	<div class="mb-5 d-flex align-items-center hero">
+		<div class="mx-auto">
+			<h1>UserStyles.org Archive</h1>
+			<p>
+				USo-Archive is a full mirror of <a href="https://userstyles.org" target="_blank">userstyles.org</a>, created after the original website became unusable.
+			</p>
+			<div class="d-flex justify-content-center gap-3">
+				<a class="btn btn-dark" href="/browse/styles">Browse userstyles</a>
+				<a class="btn btn-dark" href="/browse/styles">Browse categories</a>
+			</div>
+		</div>
 	</div>
 	<div class="mb-5">
-		<h1 class="text-center">Stylus</h1>
+		<h2>Stylus</h2>
+		<p>
+			"Stylus" is a fork of the popular Stylish extension which can be used to restyle the web.
+			The objective in creating Stylus was to remove any and all analytics, and return to a more user-friendly UI.
+		</p>
+		<div class="d-flex justify-content-center gap-3">
+			<a class="btn btn-dark" href="https://addons.mozilla.org/firefox/addon/styl-us/" target="_blank">Firefox</a>
+			<a class="btn btn-dark" href="https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne" target="_blank">Chromium</a>
+			<a class="btn btn-dark" href="https://github.com/openstyles/stylus/wiki/Opera,-Outdated-Stylus" target="_blank">Opera</a>
+		</div>
+	</div>
+	<div class="mb-5">
+		<h2>UserStyles.world</h2>
+		<p>
+			A free and open-source, community-driven, modern alternative to <a href="https://userstyles.org" target="_blank">userstyles.org</a>.
+			For the community, by the community.
+		</p>
+		<div class="d-flex justify-content-center gap-3">
+			<a class="btn btn-dark" href="https://userstyles.world/" target="_blank">Homepage</a>
+			<a class="btn btn-dark" href="https://userstyles.world/explore" target="_blank">Explore userstyles</a>
+		</div>
 	</div>
 </Container>
-<!-- Search -->
-<!-- Most popular (week) styles -->
-<!-- About -->
-<!-- Stylus -->
-<!-- UserStyles.world -->
+<style>
+	.hero {
+		min-height: 75vh;
+	}
+</style>

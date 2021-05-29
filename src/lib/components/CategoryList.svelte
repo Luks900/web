@@ -1,8 +1,7 @@
 <script lang="ts">
-	import Pagination from '$lib/components/Pagination.svelte';
 	import Category from '$lib/components/Category.svelte';
+	import Pagination from '$lib/components/Pagination.svelte';
 	import type { CategoriesIndex } from "$lib/types";
-	import { Col,Row } from 'sveltestrap';
 
 	export let data: CategoriesIndex = [];
 	export let page = 1;
@@ -22,13 +21,11 @@
 	$: update(data, page, perPage);
 </script>
 
-<Row>
-	{#each paginated as category (category.n)}
-		<Category data={category} />
-	{/each}
-</Row>
-<Row>
-	<div class="m-auto">
-		<Pagination bind:current={page} bind:total={totalPages} />
-	</div>
-</Row>
+{#each paginated as category (category.n)}
+<div class="mb-4">
+	<Category data={category} />
+</div>
+{/each}
+<div class="m-auto">
+	<Pagination bind:current={page} bind:total={totalPages} />
+</div>

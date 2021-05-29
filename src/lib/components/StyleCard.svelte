@@ -14,12 +14,12 @@
 	<CardBody>
 		<h5 class="card-title">{data.n}</h5>
 		{#if data.ai && data.an}
-			<CardText><small>By <a href={'/browse/styles/?search=' + encodeURIComponent("@"+data.ai)}>@{data.an} ({data.ai})</a></small></CardText>
+			<CardText><small>By <a class="underline" href={'/browse/styles/?search=' + encodeURIComponent("@"+data.ai)}>@{data.an} ({data.ai})</a></small></CardText>
 		{/if}
 	</CardBody>
 	<div class="card-footer">
 		<div class="d-flex justify-content-between overflow-hidden">
-			<div class="footer-category text-capitalize"><Icon class="me-1" name="hash" /> {data.c}</div>
+			<div class="footer-category text-capitalize"><a href={'/browse/styles/?search=' + encodeURIComponent("#"+data.c)}><Icon class="me-1" name="hash" /> {data.c}</a></div>
 			<div><Icon class="me-1" name="download"/> {data.w}</div>
 			<div><Icon class="me-1" name="calendar"/> {new Date(data.u * 1000).toLocaleDateString()}</div>
 		</div>
@@ -55,21 +55,11 @@
 		transition: box-shadow 0.1s;
 	}
 
-	a:not(.card) {
+	a.underline {
 		text-decoration: underline;
 	}
 
 	a.card:hover {
 		box-shadow: 2px 2px 20px 5px rgba(0, 0, 0, 0.2);
 	}
-
-	/* a.card button {
-		z-index: 1;
-	}
-
-	a.card.disabled,
-	a.card[disabled] {
-		pointer-events: none;
-		opacity: .8;
-	} */
 </style>

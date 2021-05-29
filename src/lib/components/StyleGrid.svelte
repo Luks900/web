@@ -25,7 +25,7 @@
 
 <Row>
 	{#each paginated as style (style.i)}
-		<Col xl="3" lg="4" md="6" sm="12" class="mb-4">
+		<Col xl={3} lg={4} md={6} sm={12} class="mb-4">
 			<StyleCard data={style} />
 		</Col>
 	{/each}

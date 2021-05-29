@@ -2,10 +2,10 @@
 	import { browser } from "$app/env";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-    import CategoryList from "$lib/components/CategoryList.svelte";
+	import CategoryList from "$lib/components/CategoryList.svelte";
 	import type { SortedSearchIndexes } from "$lib/stores";
 	import { styleIndex } from '$lib/stores';
-	import type { CategoriesIndex, SearchIndex } from '$lib/types';
+	import type { CategoriesIndex } from '$lib/types';
 	import { Query } from "$lib/utils";
 	import { onMount } from 'svelte';
 	import { Button,Container,Form,FormGroup,Input,InputGroup,Spinner } from 'sveltestrap';
@@ -95,14 +95,17 @@
 		<Spinner />
 	</div>
 {:else if $styleIndex.error}
-	Error! {$styleIndex.error}
+	<Container>
+		<h1>Error</h1>
+		{$styleIndex.error}
+	</Container>
 {:else if $styleIndex.data}
 	<Container xxl>
 		<Form on:submit={onSearch}>
 			<FormGroup>
 				<InputGroup>
 					<Input bind:value={input.search} type="text" name="search" id="search" placeholder="Search categories..." />
-					<Button type="submit">Search</Button>
+					<Button type="submit" color="dark">Search</Button>
 				</InputGroup>
 			</FormGroup>
 		</Form>
