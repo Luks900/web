@@ -26,7 +26,7 @@
 	<div class="card-footer">
 		<div class="d-flex justify-content-between overflow-hidden">
 			<div class="footer-category text-capitalize">
-				<a href={'/browse/styles/?search=' + encodeURIComponent('#' + data.c)}>
+				<a class="underline" href={'/browse/styles/?search=' + encodeURIComponent('#' + data.c)}>
 					<Icon class="me-1" name="hash" /> {data.c}
 				</a>
 			</div>
@@ -54,11 +54,8 @@
 		text-overflow: ellipsis;
 	}
 
-	img {
-		object-fit: cover;
-	}
-
 	.screenshot {
+		object-fit: cover;
 		height: 220px;
 	}
 
@@ -69,7 +66,7 @@
 		transition: box-shadow 0.1s;
 	}
 
-	a.underline {
+	a.underline:hover {
 		text-decoration: underline;
 	}
 
