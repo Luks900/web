@@ -88,6 +88,10 @@ export function fetchOnce<T>(
 	return { subscribe };
 }
 
+function prefersDarkColorScheme(): boolean {
+	return window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)").matches : false;
+}
+
 function setDarkClass(value: boolean) {
 	if (value) {
 		document.documentElement.classList.add('dark');
@@ -103,12 +107,15 @@ function getDarkTheme() {
 		const value: boolean = JSON.parse(prevValue);
 		return value;
 	} else {
-		return false;
+		return prefersDarkColorScheme();
 	}
 }
 
 function setDarkTheme(value: boolean) {
-	localStorage.setItem('dark-theme', JSON.stringify(value));
+	if (value === prefersDarkColorScheme())
+		localStorage.removeItem("dark-theme");
+	else
+		localStorage.setItem('dark-theme', JSON.stringify(value));
 	setDarkClass(value);
 }
 
