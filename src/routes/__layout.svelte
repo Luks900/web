@@ -27,7 +27,10 @@
 
 <header>
 	<Navbar dark color="dark" class="mb-4" expand="md">
-		<NavbarBrand href="/">UserStyles.org Archive</NavbarBrand>
+		<NavbarBrand href="/" class="d-flex align-items-center">
+			<img class="p-2" style="max-height: 40px" src="/icon.png" alt="Logo"/>
+			UserStyles.org Archive
+		</NavbarBrand>
 		<NavbarToggler on:click={() => (isOpen = !isOpen)} />
 		<Collapse class="justify-content-end gap-2" {isOpen} navbar expand="md" on:update={handleUpdate}>
 			<Nav navbar>
