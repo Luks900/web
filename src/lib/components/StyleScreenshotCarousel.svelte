@@ -34,7 +34,9 @@
 		<div class="carousel-inner">
 			{#each screenshots as item, index}
 				<CarouselItem bind:activeIndex itemIndex={index}>
-					<img src={item} class="d-block w-100 rounded" alt={`Screenshot ${index + 1}`} />
+					<a href={item} target="_blank">
+						<img src={item} class="d-block w-100 rounded" alt={`Screenshot ${index + 1}`} />
+					</a>
 				</CarouselItem>
 			{/each}
 		</div>
@@ -43,5 +45,7 @@
 		<CarouselControl direction="next" bind:activeIndex items={screenshots} />
 	</Carousel>
 {:else if screenshots.length === 1}
-	<img src={screenshots[0]} class="d-block w-100 rounded" alt="Screenshot" />
+	<a href={screenshots[0]} target="_blank">
+		<img src={screenshots[0]} class="d-block w-100 rounded" alt="Screenshot" />
+	</a>
 {/if}
