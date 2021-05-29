@@ -76,7 +76,7 @@
 </footer>
 
 <style>
-	.btn-unstyled {
+	:global(.btn-unstyled) {
 		background: none;
 		color: inherit;
 		border: none;

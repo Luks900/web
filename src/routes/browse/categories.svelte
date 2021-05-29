@@ -2,7 +2,7 @@
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import CategoryList from '$lib/components/CategoryList.svelte';
+	import Categories from '$lib/components/Categories.svelte';
 	import type { SortedSearchIndexes } from '$lib/stores';
 	import { styleIndex } from '$lib/stores';
 	import type { CategoriesIndex } from '$lib/types';
@@ -96,4 +96,4 @@
 		</InputGroup>
 	</FormGroup>
 </Form>
-<CategoryList bind:page={currentPage} {data} />
+<Categories bind:page={currentPage} {data} />

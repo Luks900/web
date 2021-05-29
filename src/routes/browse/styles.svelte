@@ -3,13 +3,15 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	
-	import StyleGrid from '$lib/components/StyleGrid.svelte';
+	import Styles from '$lib/components/Styles.svelte';
 	import type { SortedSearchIndexes } from '$lib/stores';
 	import { styleIndex } from '$lib/stores';
 	import type { SearchIndex } from '$lib/types';
 	import { Query } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import { Button, Form, FormGroup, Input, InputGroup } from 'sveltestrap';
+	import { Button, Form, FormGroup, Icon, Input, InputGroup, InputGroupText } from 'sveltestrap';
+
+	let table: boolean = false;
 
 	let query: Query;
 	let update = false;
@@ -26,7 +28,8 @@
 		query = new Query(window.location.search, {
 			search: '',
 			sort: 'weeklyInstalls',
-			page: '1'
+			page: '1',
+			table: 'false'
 		});
 
 		onRouteChanged();
@@ -72,21 +75,23 @@
 		}
 	}
 
-	$: updateQuery(search, sort, currentPage);
+	$: updateQuery(search, sort, currentPage, table);
 
-	async function updateQuery(search: string, sort: string, currentPage: number) {
+	async function updateQuery(search: string, sort: string, currentPage: number, table: boolean) {
 		if (!update) return;
 
 		if (
 			search === query.vars.search &&
 			sort === query.vars.sort &&
-			currentPage.toString() === query.vars.page
+			currentPage.toString() === query.vars.page &&
+			table.toString() === query.vars.table
 		)
 			return;
 
 		query.vars.search = search;
 		query.vars.sort = sort;
 		query.vars.page = currentPage.toString();
+		query.vars.table = table.toString();
 
 		if (browser) {
 			update = false;
@@ -104,6 +109,7 @@
 		input.search = query.vars.search;
 		input.sort = query.vars.sort;
 		onSearch();
+		table = query.vars.table === 'true'
 		currentPage = parseInt(query.vars.page);
 
 		data = filterStyles($styleIndex.data, search, sort);
@@ -130,8 +136,11 @@
 				<option value="updated">Updated</option>
 				<option value="created">Created</option>
 			</select>
+			<Button color="secondary" on:click={() => table = !table}>
+				<Icon name={table ? "grid" : "table"} />
+			</Button>
 			<Button type="submit" color="dark">Search</Button>
 		</InputGroup>
 	</FormGroup>
 </Form>
-<StyleGrid bind:page={currentPage} {data} />
+<Styles {table} on:sort={e => { input.sort = e.detail; sort = e.detail }} bind:page={currentPage} {data} />
