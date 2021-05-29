@@ -29,8 +29,6 @@ function getCategories(weeklyInstalls: SearchIndex): CategoriesIndex {
 	for (const key in categories) {
 		arr.push(categories[key]);
 	}
-
-	console.log(arr);
 	arr.sort((a, b) => b.s.length - a.s.length);
 
 	return arr;
