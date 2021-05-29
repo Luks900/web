@@ -2,13 +2,14 @@
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	
 	import StyleGrid from '$lib/components/StyleGrid.svelte';
 	import type { SortedSearchIndexes } from '$lib/stores';
 	import { styleIndex } from '$lib/stores';
 	import type { SearchIndex } from '$lib/types';
 	import { Query } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import { Button, Form, FormGroup, Input, InputGroup, Spinner } from 'sveltestrap';
+	import { Button, Form, FormGroup, Input, InputGroup } from 'sveltestrap';
 
 	let query: Query;
 	let update = false;
@@ -118,28 +119,19 @@
 
 </script>
 
-{#if $styleIndex.isLoading}
-	<div class="d-flex justify-content-center align-items-center h-100 w-100">
-		<Spinner />
-	</div>
-{:else if $styleIndex.error}
-	<h1>Error</h1>
-	{$styleIndex.error}
-{:else if $styleIndex.data}
-	<Form on:submit={onSearch}>
-		<FormGroup>
-			<InputGroup>
-				<Input bind:value={input.search} type="text" name="search" id="search" placeholder="Search userstyles..." />
-				<select bind:value={input.sort} class="form-select" style="max-width: max-content" aria-label="Sort by">
-					<option value="weeklyInstalls">Weekly installs</option>
-					<option value="totalInstalls">Total installs</option>
-					<option value="rating">Rating</option>
-					<option value="updated">Updated</option>
-					<option value="created">Created</option>
-				</select>
-				<Button type="submit" color="dark">Search</Button>
-			</InputGroup>
-		</FormGroup>
-	</Form>
-	<StyleGrid bind:page={currentPage} {data} />
-{/if}
+<Form on:submit={onSearch}>
+	<FormGroup>
+		<InputGroup>
+			<Input bind:value={input.search} type="text" name="search" id="search" placeholder="Search userstyles..." />
+			<select bind:value={input.sort} class="form-select" style="max-width: max-content" aria-label="Sort by">
+				<option value="weeklyInstalls">Weekly installs</option>
+				<option value="totalInstalls">Total installs</option>
+				<option value="rating">Rating</option>
+				<option value="updated">Updated</option>
+				<option value="created">Created</option>
+			</select>
+			<Button type="submit" color="dark">Search</Button>
+		</InputGroup>
+	</FormGroup>
+</Form>
+<StyleGrid bind:page={currentPage} {data} />

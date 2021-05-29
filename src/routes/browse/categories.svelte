@@ -8,7 +8,7 @@
 	import type { CategoriesIndex } from '$lib/types';
 	import { Query } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import { Button, Form, FormGroup, Input, InputGroup, Spinner } from 'sveltestrap';
+	import { Button, Form, FormGroup, Input, InputGroup } from 'sveltestrap';
 
 	let query: Query;
 	let update = false;
@@ -88,21 +88,12 @@
 
 </script>
 
-{#if $styleIndex.isLoading}
-	<div class="d-flex justify-content-center align-items-center h-100">
-		<Spinner />
-	</div>
-{:else if $styleIndex.error}
-	<h1>Error</h1>
-	{$styleIndex.error}
-{:else if $styleIndex.data}
-	<Form on:submit={onSearch}>
-		<FormGroup>
-			<InputGroup>
-				<Input bind:value={input.search} type="text" name="search" id="search" placeholder="Search categories..." />
-				<Button type="submit" color="dark">Search</Button>
-			</InputGroup>
-		</FormGroup>
-	</Form>
-	<CategoryList bind:page={currentPage} {data} />
-{/if}
+<Form on:submit={onSearch}>
+	<FormGroup>
+		<InputGroup>
+			<Input bind:value={input.search} type="text" name="search" id="search" placeholder="Search categories..." />
+			<Button type="submit" color="dark">Search</Button>
+		</InputGroup>
+	</FormGroup>
+</Form>
+<CategoryList bind:page={currentPage} {data} />
