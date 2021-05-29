@@ -19,7 +19,11 @@ export function addTargetBlank(template: HTMLTemplateElement): void {
 	function domMemes(node: any) {
 		for (const child of node.children) {
 			if (child.nodeName === 'A') {
-				child.target = '_blank';
+				try {
+					if (new URL(child.href).host !== window.location.host) child.target = '_blank';
+				} catch {
+					child.target = '_blank';
+				}
 			}
 			if (child.children && child.children.length > 0) {
 				domMemes(child);

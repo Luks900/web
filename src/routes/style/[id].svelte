@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import StyleScreenshotCarousel from '$lib/components/StyleScreenshotCarousel.svelte';
-	import { DATA_PREFIX, USO_PREFIX } from '$lib/constants';
+	import { DATA_PREFIX,USO_PREFIX } from '$lib/constants';
 	import type { Style } from '$lib/types';
 	import { addTargetBlank,htmlToTemplate } from "$lib/utils";
 	import DOMPurify from 'dompurify';
 	import linkifyHtml from 'linkifyjs/html.js';
-	import { Button,Col,Container,Icon,Row,Spinner } from 'sveltestrap';
+	import { Col,Container,Icon,Row,Spinner } from 'sveltestrap';
 
 	let id: string, url: string, promise: Promise<Style>;
 
@@ -14,8 +14,68 @@
 	$: url = `${DATA_PREFIX}/styles/${id}.json`;
 	$: promise = fetch(url).then((r) => r.json());
 
-	function processModalDescription(html: string) {
-		let newHtml = html.replace(/\r?\n/g, '<br>');
+	function trim(str: string, char: string): string {
+		return str.slice(str[0] === char ? 1 : 0, str[str.length] === char ? str.length - 1 : str.length);
+	}
+
+	function createUrl(category?: string, search?: string, style?: string, user?: string, page?: string) {
+		let params = new URLSearchParams();
+		if (style)
+			return `/style/${style}`;
+
+		if (page)
+			params.set("page", page);
+		
+		if (category)
+			search = `#${category} ${search}`;
+		
+		if (user)
+			search = `@${user} ${search}`;
+
+		return "/browse/styles?" + params.toString();
+	}
+
+	function convertUsoUrl(url: string) {
+		const parsedUrl = new URL(url);
+		const path = trim(parsedUrl.pathname, "/").split("/");
+		const query = parsedUrl.search ? new URLSearchParams(trim(parsedUrl.search, "?")) : null;
+		let page: string;
+		let search: string;
+
+		if (query) {
+			page = query.get("page");
+		}
+		if (query) {
+			search = query.get("search_terms");
+		}
+		if (path[0] === "styles" && path[1] === "browse") {
+			const category = path[2];
+			return createUrl(category, search, null, null, page);
+		} else if (path[0] === "styles") {
+			const style = path[1];
+			return createUrl(null, null, style, null, null);
+		} else if (path[0] === "users") {
+			const user = path[1];
+			return createUrl(null, search, null, user, page);
+		} else if (path[0] === "style_screenshots") {
+			return `${DATA_PREFIX}/screenshots/${path[1]}`;
+		}
+	}
+
+	function replaceUrls(str: string): string {
+		const regex = /https?:\/\/userstyles\.org\/[^\s"]+/;
+		let m;
+		let i = 0;
+		while ((m = regex.exec(str)) !== null && i < 500) {
+			str = str.slice(0, m.index) + (convertUsoUrl(m[0]) || "*uso link*") + str.slice(m.index + m[0].length);
+			i++;
+		}
+		return str;
+	}
+
+	function processDescription(html: string) {
+		let newHtml = replaceUrls(html);
+		newHtml = html.replace(/\r?\n/g, '<br>');
 		try {
 			newHtml = linkifyHtml(newHtml, {
 				target: '_blank',
@@ -41,25 +101,25 @@
 		<h1 class="mb-4">{data.info.name}</h1>
 		<StyleScreenshotCarousel {data} />
 		<Row class="mt-4">
-			<Col xs={12} class="d-flex flex-row-reverse mb-4">
+			<Col xs={12} class="d-flex flex-row-reverse gap-2 mb-4">
 				{#if data.style.css}
-					<a href={`${DATA_PREFIX}/usercss/${data.id}.user.css`} target="_blank" class="btn btn-primary ms-2">Install</a>
+					<a href={`${DATA_PREFIX}/usercss/${data.id}.user.css`} target="_blank" class="btn btn-dark">Install with Stylus</a>
 				{/if}
-				<a href={url} target="_blank" class="btn btn-outline-secondary ms-2">View JSON</a>
+				<a href={url} target="_blank" class="btn btn-outline-secondary">View JSON</a>
 				<a href={`${USO_PREFIX}/styles/${data.id}`} target="_blank" class="btn btn-outline-secondary">View on UserStyles.org</a>
 			</Col>
 			<Col xs={12} lg={7} xl={8} class="order-2 order-lg-1">
 				{#if data.info.description}
-					<h3>Description</h3>
-					<p>{@html processModalDescription(data.info.description)}</p>
+					<h2>Description</h2>
+					<p>{@html processDescription(data.info.description)}</p>
 				{/if}
 				{#if data.info.additionalInfo}
-					<h3>Additional info</h3>
-					<p>{@html processModalDescription(data.info.additionalInfo)}</p>
+					<h2>Additional info</h2>
+					<p>{@html processDescription(data.info.additionalInfo)}</p>
 				{/if}
 			</Col>
 			<Col class="order-1 mb-3">
-				<h3>Details</h3>
+				<h2>Details</h2>
 				<Row>
 					<Col xs={3} lg={5}>Rating</Col>
 					<Col>
@@ -106,7 +166,7 @@
 					<Col xs={3} lg={5}>Created at</Col>
 					<Col>{(new Date(data.info.createdAt)).toLocaleString()}</Col>
 				</Row>
-				<h3 class="mt-2">Stats</h3>
+				<h2 class="mt-2">Stats</h2>
 				<Row>
 					<Col xs={3} lg={5}>Installs this week</Col>
 					<Col>{data.stats.installs.weekly}</Col>
