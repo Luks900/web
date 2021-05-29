@@ -55,8 +55,8 @@
 </main>
 <footer class="mt-auto text-center py-3">
 	<Container class="text-center d-flex justify-content-between align-items-center">
-		<span class="text-secondary">© 33KK</span>
-		<Nav>
+		<span class="text-secondary text-nowrap">© 33KK</span>
+		<Nav class="justify-content-end">
 			<NavItem>
 				<NavLink href="/legal/privacy">Privacy</NavLink>
 			</NavItem>
