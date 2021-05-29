@@ -5,7 +5,7 @@
 
 	export let data: SearchIndexItem;
 </script>
-<a class="h-100 card hover-shadow overflow-hidden" href={'/style/' + data.i}>
+<a class="h-100 w-100 card hover-shadow overflow-hidden" href={'/style/' + data.i}>
 	{#if data.sn}
 		<img class="img" src={getScreenshot({name: data.sn, archived: data.sa})} alt="Screenshot" />
 	{:else}

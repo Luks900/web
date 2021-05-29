@@ -1,6 +1,6 @@
 import { browser } from '$app/env';
 import { DATA_PREFIX } from '$lib/constants';
-import type { SearchIndex } from '$lib/types';
+import type { SearchIndex, CategoriesIndex, CategoriesIndexItem } from '$lib/types';
 
 export type SortedSearchIndexes = {
 	weeklyInstalls: SearchIndex;
@@ -8,11 +8,34 @@ export type SortedSearchIndexes = {
 	rating: SearchIndex;
 	updated: SearchIndex;
 	created: SearchIndex;
+	categories: CategoriesIndex;
 };
 
 export const styleIndex = fetchOnce<SortedSearchIndexes>(() =>
 	fetch(`${DATA_PREFIX}/search-index.json`).then((resp) => resp.json().then((e) => sort(e)))
 );
+
+function getCategories(weeklyInstalls: SearchIndex): CategoriesIndex {
+	let categories: { [key: string]: CategoriesIndexItem } = {};
+	for (const style of weeklyInstalls) {
+		if (categories[style.c] === undefined) {
+			categories[style.c] = {n: style.c, s: [style]};
+		}
+		else {
+			categories[style.c].s.push(style);
+		}
+	}
+
+	let arr = [];
+	for (const key in categories) {
+		arr.push(categories[key]);
+	}
+
+	console.log(arr);
+	arr.sort((a,b)=>b.s.length-a.s.length);
+
+	return arr;
+}
 
 function sort(weeklyInstalls: SearchIndex): SortedSearchIndexes {
 	return {
@@ -20,7 +43,8 @@ function sort(weeklyInstalls: SearchIndex): SortedSearchIndexes {
 		totalInstalls: [...weeklyInstalls].sort((a, b) => b.t - a.t),
 		rating: [...weeklyInstalls].sort((a, b) => b.r - a.r),
 		updated: [...weeklyInstalls].sort((a, b) => b.u - a.u),
-		created: [...weeklyInstalls].sort((a, b) => b.i - a.i)
+		created: [...weeklyInstalls].sort((a, b) => b.i - a.i),
+		categories: getCategories(weeklyInstalls)
 	};
 }
 

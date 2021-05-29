@@ -2,6 +2,15 @@ export type StyleFormat = 'uso';
 
 export type SearchIndex = Array<SearchIndexItem>;
 
+export type CategoriesIndex = Array<CategoriesIndexItem>;
+
+export type CategoriesIndexItem = {
+	/** Name */
+	n: string;
+	/** Styles */
+	s: SearchIndex;
+};
+
 export type SearchIndexItem = {
 	/** Format */
 	f: StyleFormat;
