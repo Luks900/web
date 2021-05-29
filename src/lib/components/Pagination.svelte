@@ -43,12 +43,12 @@
 	<ul class="pagination flex-wrap">
 		<PaginationItem>
 			<button on:click={() => paginate(1)} class="page-link">
-				<span aria-hidden="true">«</span> <span class="sr-only">First</span>
+				«
 			</button>
 		</PaginationItem>
 		<PaginationItem>
 			<button on:click={() => paginate(current - 1)} class="page-link">
-				<span aria-hidden="true">‹</span> <span class="sr-only">Previous</span>
+				‹
 			</button>
 		</PaginationItem>
 		{#each array as item}
@@ -60,12 +60,12 @@
 		{/each}
 		<PaginationItem>
 			<button on:click={() => paginate(current + 1)} class="page-link">
-				<span aria-hidden="true">›</span> <span class="sr-only">Next</span>
+				›
 			</button>
 		</PaginationItem>
 		<PaginationItem>
 			<button on:click={() => paginate(total)} class="page-link">
-				<span aria-hidden="true">»</span> <span class="sr-only">Last</span>
+				»
 			</button>
 		</PaginationItem>
 	</ul>
