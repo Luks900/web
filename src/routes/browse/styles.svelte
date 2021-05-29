@@ -9,9 +9,9 @@
 	import type { SearchIndex } from '$lib/types';
 	import { Query } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import { Button, Form, FormGroup, Icon, Input, InputGroup, InputGroupText } from 'sveltestrap';
+	import { Button, Form, FormGroup, Icon, Input, InputGroup } from 'sveltestrap';
 
-	let table: boolean = false;
+	let table = false;
 
 	let query: Query;
 	let update = false;

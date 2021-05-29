@@ -89,7 +89,7 @@ export function fetchOnce<T>(
 }
 
 function prefersDarkColorScheme(): boolean {
-	return window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)").matches : false;
+	return window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : false;
 }
 
 function setDarkClass(value: boolean) {
@@ -112,10 +112,8 @@ function getDarkTheme() {
 }
 
 function setDarkTheme(value: boolean) {
-	if (value === prefersDarkColorScheme())
-		localStorage.removeItem("dark-theme");
-	else
-		localStorage.setItem('dark-theme', JSON.stringify(value));
+	if (value === prefersDarkColorScheme()) localStorage.removeItem('dark-theme');
+	else localStorage.setItem('dark-theme', JSON.stringify(value));
 	setDarkClass(value);
 }
 
