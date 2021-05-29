@@ -15,6 +15,9 @@
 	<Collapse class="justify-content-end" {isOpen} navbar expand="md" on:update={handleUpdate}>
 		<Nav navbar>
 			<NavItem>
+				<NavLink href="/">Home</NavLink>
+			</NavItem>
+			<NavItem>
 				<NavLink href="/browse/styles">Userstyles</NavLink>
 			</NavItem>
 			<NavItem>
