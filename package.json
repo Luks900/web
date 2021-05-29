@@ -1,6 +1,9 @@
 {
 	"name": "uso-archive-web",
 	"version": "0.0.1",
+	"engines": {
+		"node": ">=14.13.1"
+	},
 	"scripts": {
 		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",
