@@ -4,7 +4,7 @@
 	export let current = 1;
 	export let total = 10;
 
-	type PaginationArray = { active: boolean, page: number }[];
+	type PaginationArray = { active: boolean; page: number }[];
 	let array: PaginationArray = [];
 
 	$: update(current, total);
@@ -36,6 +36,7 @@
 		}
 		return array;
 	}
+
 </script>
 
 <nav aria-label="pagination">
@@ -75,4 +76,5 @@
 		display: flex;
 		justify-content: center;
 	}
+
 </style>

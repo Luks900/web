@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Style } from "$lib/types";
+	import type { Style } from '$lib/types';
 	import { getScreenshot } from '$lib/utils';
-	import { Carousel,CarouselControl,CarouselIndicators,CarouselItem } from 'sveltestrap';
+	import { Carousel, CarouselControl, CarouselIndicators, CarouselItem } from 'sveltestrap';
 
 	let activeIndex = 0;
 
@@ -18,12 +18,13 @@
 		}
 		if (data.screenshots.additional) {
 			for (const ss of data.screenshots.additional) {
-				screenshots.push(getScreenshot(ss))
+				screenshots.push(getScreenshot(ss));
 			}
 		}
 
 		return screenshots;
 	}
+
 </script>
 
 {#if screenshots && screenshots.length > 1}

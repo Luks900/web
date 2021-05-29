@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Pagination from '$lib/components/Pagination.svelte';
 	import StyleCard from '$lib/components/StyleCard.svelte';
-	import type { SearchIndex } from "$lib/types";
-	import { Col,Row } from 'sveltestrap';
+	import type { SearchIndex } from '$lib/types';
+	import { Col, Row } from 'sveltestrap';
 
 	export let data: SearchIndex = [];
 	export let page = 1;
@@ -10,8 +10,7 @@
 	export let perPage = 36;
 
 	let paginated: SearchIndex = [];
-	
-	
+
 	function update(..._args: unknown[]) {
 		totalPages = Math.ceil(data.length / perPage);
 		if (page > totalPages) page = totalPages;
@@ -21,6 +20,7 @@
 	}
 
 	$: update(data, page, perPage);
+
 </script>
 
 <Row>
