@@ -11,7 +11,7 @@
 			</p>
 			<div class="d-flex justify-content-center gap-3">
 				<a class="btn btn-dark" href="/browse/styles">Browse userstyles</a>
-				<a class="btn btn-dark" href="/browse/styles">Browse categories</a>
+				<a class="btn btn-dark" href="/browse/categories">Browse categories</a>
 			</div>
 		</div>
 	</div>
