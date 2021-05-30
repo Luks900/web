@@ -67,7 +67,7 @@
 				<NavLink href="/legal/copyright">Copyright</NavLink>
 			</NavItem>
 			<NavItem>
-				<NavLink href="https://github.com/uso-archive/uso-archive.github.io" target="_blank">
+				<NavLink href="https://github.com/uso-archive/web" target="_blank">
 					Source code
 				</NavLink>
 			</NavItem>
