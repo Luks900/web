@@ -8,11 +8,13 @@
 
 	const dispatch = createEventDispatcher();
 
+	export let table = false;
 	export let data: SearchIndex = [];
 	export let page = 1;
 	export let totalPages = 1;
 	export let perPage = 36;
-	export let table = false;
+
+	$: perPage = table ? 75 : 36;
 
 	let paginated: SearchIndex = [];
 
