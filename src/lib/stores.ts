@@ -47,20 +47,20 @@ function sort(weeklyInstalls: SearchIndex): SortedSearchIndexes {
 }
 
 type DataType<T> = { isLoading: boolean; error?: Error; data?: T };
-type HandlerType<T> = (newValue: { isLoading: boolean; error?: Error; data?: T }) => void;
+type HandlerType<T> = (value: { isLoading: boolean; error?: Error; data?: T }) => void;
 
 export function fetchOnce<T>(
 	promiseFn: any, // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 	initialValue: DataType<T> = { isLoading: false }
 ): { subscribe: (handler: HandlerType<T>) => () => void } {
-	let value = initialValue;
+	let _value = initialValue;
 	const subs = [];
 
 	function subscribe(handler: HandlerType<T>): () => void {
 		subs.push(handler);
 
-		if (value === initialValue && !value.isLoading && browser) {
-			value.isLoading = true;
+		if (_value === initialValue && !_value.isLoading && browser) {
+			_value.isLoading = true;
 			const t = promiseFn();
 			if (t instanceof Promise) {
 				t.then((data: T) => {
@@ -73,19 +73,34 @@ export function fetchOnce<T>(
 			}
 		}
 
-		handler(value);
+		handler(_value);
 
 		return () => subs.splice(subs.indexOf(handler));
 	}
 
-	function set(newValue: { isLoading: boolean; error?: Error; data?: T }) {
-		if (value === newValue) return;
+	function set(value: DataType<T>) {
+		if (_value === value) return;
 
-		value = newValue;
-		subs.forEach((s) => s(value));
+		_value = value;
+		subs.forEach((s) => s(_value));
 	}
 
 	return { subscribe };
+}
+
+export function createAwaiter<T>(promise: Promise<T>) {
+	const { subscribe, set } = writable({ isLoading: true, error: null, data: null });
+	
+	_set(promise);
+
+	function _set(promise: Promise<T>) {
+		promise.then(data => set({ isLoading: false, error: null, data }), error => set({ isLoading: false, error, data: null }))
+	}
+
+	return {
+		subscribe,
+		set: _set
+	};
 }
 
 function prefersDarkColorScheme(): boolean {

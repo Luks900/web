@@ -2,17 +2,20 @@
 	import { page } from '$app/stores';
 	import StyleScreenshotCarousel from '$lib/components/StyleScreenshotCarousel.svelte';
 	import { DATA_PREFIX, USO_PREFIX } from '$lib/constants';
+	import { createAwaiter } from '$lib/stores';
 	import type { Style } from '$lib/types';
 	import { addTargetBlank, htmlToTemplate } from '$lib/utils';
 	import DOMPurify from 'dompurify';
 	import linkifyHtml from 'linkifyjs/html.js';
 	import { Col, Container, Icon, Row, Spinner } from 'sveltestrap';
 
-	let id: string, url: string, promise: Promise<Style>;
+	let id: string, url: string, name: string, promise: Promise<Style>, awaiter;
 
 	$: id = $page.params.id;
 	$: url = `${DATA_PREFIX}/styles/${id}.json`;
 	$: promise = fetch(url).then((r) => r.json());
+	$: awaiter = createAwaiter(promise);
+	$: name = $awaiter.data?.info?.name || "";
 
 	function trim(str: string, char: string): string {
 		return str.slice(
@@ -101,34 +104,37 @@
 
 </script>
 
+<svelte:head>
+	<title>{name ? name + " - " : ""}UserStyles.org Archive</title>
+</svelte:head>
 <Container>
-	{#await promise}
+	{#if $awaiter && $awaiter.isLoading}
 		<div class="d-flex justify-content-center align-items-center h-100">
 			<Spinner />
 		</div>
-	{:then data}
-		<h1 class="mb-4">{data.info.name}</h1>
-		<StyleScreenshotCarousel {data} />
+	{:else if $awaiter && $awaiter.data}
+		<h1 class="mb-4">{$awaiter.data.info.name}</h1>
+		<StyleScreenshotCarousel data={$awaiter.data} />
 		<Row class="mt-4">
 			<Col xs={12} class="d-flex flex-row-reverse gap-2 mb-4">
-				{#if data.style.css}
-					<a href={`${DATA_PREFIX}/usercss/${data.id}.user.css`} target="_blank" class="btn btn-dark">
+				{#if $awaiter.data.style.css}
+					<a href={`${DATA_PREFIX}/usercss/${$awaiter.data.id}.user.css`} target="_blank" class="btn btn-dark">
 						Install with Stylus
 					</a>
 				{/if}
 				<a href={url} target="_blank" class="btn btn-outline-secondary">View JSON</a>
-				<a href={`${USO_PREFIX}/styles/${data.id}`} target="_blank" class="btn btn-outline-secondary">
+				<a href={`${USO_PREFIX}/styles/${$awaiter.data.id}`} target="_blank" class="btn btn-outline-secondary">
 					View on UserStyles.org
 				</a>
 			</Col>
 			<Col xs={12} lg={7} xl={8} class="order-2 order-lg-1">
-				{#if data.info.description}
+				{#if $awaiter.data.info.description}
 					<h2>Description</h2>
-					<p>{@html processDescription(data.info.description)}</p>
+					<p>{@html processDescription($awaiter.data.info.description)}</p>
 				{/if}
-				{#if data.info.additionalInfo}
+				{#if $awaiter.data.info.additionalInfo}
 					<h2>Additional info</h2>
-					<p>{@html processDescription(data.info.additionalInfo)}</p>
+					<p>{@html processDescription($awaiter.data.info.additionalInfo)}</p>
 				{/if}
 			</Col>
 			<Col class="order-1 mb-3">
@@ -136,31 +142,31 @@
 				<Row>
 					<Col xs={3} lg={5}>Rating</Col>
 					<Col>
-						{#if !data.stats.rating}
+						{#if !$awaiter.data.stats.rating}
 							<Icon name="dash-circle" />
-						{:else if data.stats.rating < 1.5}
-							<Icon name="hand-thumbs-down" /> {data.stats.rating}
-						{:else if data.stats.rating < 2.5}
-							<Icon name="dash-circle" /> {data.stats.rating}
+						{:else if $awaiter.data.stats.rating < 1.5}
+							<Icon name="hand-thumbs-down" /> {$awaiter.data.stats.rating}
+						{:else if $awaiter.data.stats.rating < 2.5}
+							<Icon name="dash-circle" /> {$awaiter.data.stats.rating}
 						{:else}
-							<Icon name="hand-thumbs-up" /> {data.stats.rating}
+							<Icon name="hand-thumbs-up" /> {$awaiter.data.stats.rating}
 						{/if}
 					</Col>
 				</Row>
 				<Row>
 					<Col xs={3} lg={5}>Applies to</Col>
 					<Col>
-						<a href={'/browse/styles?search=' + encodeURIComponent('#' + data.info.category)}>
-							{data.info.category}
+						<a href={'/browse/styles?search=' + encodeURIComponent('#' + $awaiter.data.info.category)}>
+							{$awaiter.data.info.category}
 						</a>
 					</Col>
 				</Row>
-				{#if data.info.author}
+				{#if $awaiter.data.info.author}
 					<Row>
 						<Col xs={3} lg={5}>Author</Col>
 						<Col>
-							<a href={'/browse/styles/?search=' + encodeURIComponent('@' + data.info.author.id)}>
-								{data.info.author.name} ({data.info.author.id})
+							<a href={'/browse/styles/?search=' + encodeURIComponent('@' + $awaiter.data.info.author.id)}>
+								{$awaiter.data.info.author.name} ({$awaiter.data.info.author.id})
 							</a>
 						</Col>
 					</Row>
@@ -168,35 +174,35 @@
 				<Row>
 					<Col xs={3} lg={5}>License</Col>
 					<Col>
-						{#if data.info.license !== 'NO-REDISTRIBUTION'}
-							<a href={'https://spdx.org/licenses/' + data.info.license} target="_blank">
-								{data.info.license}
+						{#if $awaiter.data.info.license !== 'NO-REDISTRIBUTION'}
+							<a href={'https://spdx.org/licenses/' + $awaiter.data.info.license} target="_blank">
+								{$awaiter.data.info.license}
 							</a>
 						{:else}
-							{data.info.license}
+							{$awaiter.data.info.license}
 						{/if}
 					</Col>
 				</Row>
 				<Row>
 					<Col xs={3} lg={5}>Updated at</Col>
-					<Col>{new Date(data.info.updatedAt).toLocaleString()}</Col>
+					<Col>{new Date($awaiter.data.info.updatedAt).toLocaleString()}</Col>
 				</Row>
 				<Row>
 					<Col xs={3} lg={5}>Created at</Col>
-					<Col>{new Date(data.info.createdAt).toLocaleString()}</Col>
+					<Col>{new Date($awaiter.data.info.createdAt).toLocaleString()}</Col>
 				</Row>
 				<h2 class="mt-2">Stats</h2>
 				<Row>
 					<Col xs={3} lg={5}>Installs this week</Col>
-					<Col>{data.stats.installs.weekly}</Col>
+					<Col>{$awaiter.data.stats.installs.weekly}</Col>
 				</Row>
 				<Row>
 					<Col xs={3} lg={5}>Total installs</Col>
-					<Col>{data.stats.installs.total}</Col>
+					<Col>{$awaiter.data.stats.installs.total}</Col>
 				</Row>
 			</Col>
 		</Row>
-	{:catch error}
-		{error}
-	{/await}
+	{:else if $awaiter && $awaiter.error}
+		{$awaiter.error}
+	{/if}
 </Container>

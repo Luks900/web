@@ -88,6 +88,9 @@
 
 </script>
 
+<svelte:head>
+	<title>Categories - UserStyles.org Archive</title>
+</svelte:head>
 <Form on:submit={onSearch}>
 	<FormGroup>
 		<InputGroup>

@@ -3,6 +3,9 @@
 
 </script>
 
+<svelte:head>
+	<title>Home - UserStyles.org Archive</title>
+</svelte:head>
 <Container class="text-center">
 	<div class="mb-5 d-flex align-items-center hero">
 		<div class="mx-auto">

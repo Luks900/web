@@ -125,6 +125,9 @@
 
 </script>
 
+<svelte:head>
+	<title>Styles - UserStyles.org Archive</title>
+</svelte:head>
 <Form on:submit={onSearch}>
 	<FormGroup>
 		<InputGroup>
@@ -136,7 +139,7 @@
 				<option value="updated">Updated</option>
 				<option value="created">Created</option>
 			</select>
-			<Button color="dark" on:click={() => table = !table}>
+			<Button type="button" color="dark" on:click={() => table = !table}>
 				<Icon name={table ? "grid" : "table"} />
 			</Button>
 			<Button type="submit" color="dark">Search</Button>
