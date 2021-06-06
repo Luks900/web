@@ -22,7 +22,7 @@
 	{/each}
 	<Col xs={12}>
 		<a class="btn btn-outline-secondary w-100" href={'/browse/styles/?search=' + encodeURIComponent('#' + data.n)}>
-            More styles...
+            More {data.n} styles...
         </a>
 	</Col>
 </Row>
